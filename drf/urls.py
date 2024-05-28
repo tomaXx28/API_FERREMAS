@@ -17,9 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from rest_framework.documentation import include_docs_urls
+from api import views
+from api.views import Cliente , Producto , TipoProducto, DetalleCliente , detalle_producto
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path ('api/',include('api.urls')),
-    path ('docs/',include_docs_urls(title='Api Documentantion'))
+    path ('docs/',include_docs_urls(title='Api Documentantion')),
+    path('cliente/', views.ClienteViewset.as_view({'get': 'list', 'post': 'create'}), name='cliente-list'),
+    path('cliente/<int:idCliente>/', DetalleCliente.as_view(), name='cliente-detail'),
+    path('producto/', views.ProductoViewset.as_view({'get': 'list', 'post': 'create'}), name='producto-list'),
+    path('producto/<int:idProducto>/', detalle_producto(), name='producto-detail'),
+    path('tipoproducto/', views.TipoProductoViewset.as_view({'get': 'list', 'post': 'create'}), name='tipo-producto-list'),
+    path('tipoproducto/<int:idTipo>/', views.TipoProductoViewset.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'}), name='tipo-producto-detail'),
 ]
