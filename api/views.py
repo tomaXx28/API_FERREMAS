@@ -1,10 +1,11 @@
+from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework import viewsets
 from .serializer import ClienteSerializer, ProductoSerializer, TipoProductoSerializer
 from .models import Cliente,Producto,TipoProducto
 from rest_framework import status
 from rest_framework.views import APIView
-
+from rest_framework.decorators import api_view
 
 class ClienteViewset(viewsets.ModelViewSet):
     queryset=Cliente.objects.all()
@@ -62,4 +63,19 @@ class DetalleCliente(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(['GET'])
+def getProductos(request):
+    productos = Producto.objects.all()
+    serializer = ProductoSerializer(productos, many=True)
+    return Response(serializer.data)
 
+
+def productos_por_tipo(request):
+    tipo_producto = request.GET.get('tipo_producto', None)
+    if tipo_producto:
+        productos = Producto.objects.filter(Tipo_roducto__NombreTipo=tipo_producto)
+    else:
+        productos = Producto.objects.all()
+    
+    productos_list = list(productos.values())
+    return JsonResponse(productos_list, safe=False)
