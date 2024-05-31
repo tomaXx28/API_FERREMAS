@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.views import View
 
 
 
@@ -108,3 +109,61 @@ def registrar_cliente(request):
         return JsonResponse({'error': 'Datos JSON no válidos'}, status=400)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+    
+
+
+
+class DetalleProducto(APIView):
+    def get(self, request, idProducto, format=None):
+        try:
+            producto = Producto.objects.get(idProducto=idProducto)
+        except Producto.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = ProductoSerializer(producto)
+        return Response(serializer.data)
+
+    def put(self, request, idProducto, format=None):
+        try:
+            producto = Producto.objects.get(idProducto=idProducto)
+        except Producto.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = ProductoSerializer(producto, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, idProducto, format=None):
+        try:
+            producto = Producto.objects.get(idProducto=idProducto)
+        except Producto.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = ProductoSerializer(producto, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, idProducto, format=None):
+        try:
+            producto = Producto.objects.get(idProducto=idProducto)
+        except Producto.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        producto.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+
+class ProductoDetailView(View):
+    def get(self, request, id):
+        try:
+            producto = Producto.objects.get(pk=id)
+            data = {
+                'idProducto': producto.idProducto,
+                'NombreProducto': producto.NombreProducto,
+                'Precio': producto.Precio,
+                'Descripcion': producto.Descripcion,
+            }
+            return JsonResponse(data, safe=False)
+        except Producto.DoesNotExist:
+            return JsonResponse({'error': 'Producto no encontrado'}, status=404)

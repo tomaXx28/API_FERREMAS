@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path,include
 from rest_framework.documentation import include_docs_urls
 from api import views
-from api.views import Cliente , Producto , TipoProducto, DetalleCliente
+from api.views import Cliente , Producto, ProductoDetailView , TipoProducto, DetalleCliente, DetalleProducto
 
 
 urlpatterns = [
@@ -32,4 +32,5 @@ urlpatterns = [
     path('productos_por_tipo/', views.productos_por_tipo, name='productos_por_tipo'),
      path('registrar_cliente/', views.registrar_cliente, name='registrar_cliente'),
     path('tipoproducto/<int:idTipo>/', views.TipoProductoViewset.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'}), name='tipo-producto-detail'),
+    path('producto/<int:id>/', ProductoDetailView.as_view(), name='producto-detail'),
 ]
