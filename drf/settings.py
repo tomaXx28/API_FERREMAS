@@ -136,3 +136,4 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8100",
 ]
+CORS_ALLOW_CREDENTIALS = True

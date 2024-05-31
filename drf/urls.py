@@ -30,5 +30,6 @@ urlpatterns = [
     path('producto/', views.ProductoViewset.as_view({'get': 'list', 'post': 'create'}), name='producto-list'),
     path('tipoproducto/', views.TipoProductoViewset.as_view({'get': 'list', 'post': 'create'}), name='tipo-producto-list'),
     path('productos_por_tipo/', views.productos_por_tipo, name='productos_por_tipo'),
+     path('registrar_cliente/', views.registrar_cliente, name='registrar_cliente'),
     path('tipoproducto/<int:idTipo>/', views.TipoProductoViewset.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'}), name='tipo-producto-detail'),
 ]
