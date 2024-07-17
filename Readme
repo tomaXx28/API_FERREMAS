@@ -1,0 +1,8 @@
+pip install setuptools
+.py -m virtualenv venv (entorno virtual)       
+-pip install django  
+-pip instal djangorestframework 
+-pip install coreapi
+pip install django-cors-headers
+pip install djangorestframework
+pip install mysqlclient
